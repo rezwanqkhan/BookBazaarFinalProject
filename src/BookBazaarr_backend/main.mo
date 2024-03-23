@@ -81,7 +81,7 @@ actor BookExchange {
       let currentUser = Trie.find(users, key(userId), Nat32.equal);
       switch (currentUser) {
         case (?user) {
-          if (user == email and user.Password == password) {
+          if (user.Email == email and user.Password == password) {
             return ?user; // Found the user, return it
           };
         };
