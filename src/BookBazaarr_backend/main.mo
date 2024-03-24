@@ -9,26 +9,25 @@ import Int "mo:base/Int";
 import Iter "mo:base/Iter";
 
 actor BookExchange {
-  // Define types
-  type UserID = Nat32;
-  type BookID = Nat32;
-  type iid = Int;
+type UserID = Nat32;
+type BookID = Nat32;
 
-  type Book = {
-    title : Text;
-    author : Text;
-    condition : Text;
-    owner : Text;
-    situation : Text;
-  };
+type Book = {
+  title : Text;
+  author : Text;
+  condition : Text;
+  OwnerId : UserID; // Changed to UserID to match the type
+  situation : Text;
+};
 
-  type User = {
-    name : Text;
-    lastname : Text;
-    Email : Text;
-    Password : Text;
+type User = {
+  name : Text;
+  lastname : Text;
+  Email : Text;
+  Password : Text;
+  Books : [Book]; // List of books associated with the user
+};
 
-  };
 
   // Storage for users
   private stable var nextuser : UserID = 0;
@@ -94,28 +93,109 @@ actor BookExchange {
     null; // User not found
   };
 
-  // Function to add a book to the system
-  public func addBook(book : Book) : async BookID {
+ // Function to add a book to the system
+  public func addBook(book : Book, userId: UserID) : async BookID {
     let bookId = nextbook;
     nextbook += 1; // Incrementing the next available book ID
-     books := Trie.replace(
-      books,
-      key(bookId),
-      Nat32.equal,
-      ?book,
+    
+    // Create a new Book object with the provided book details and userId
+    let newBook = {
+        title = book.title;
+        author = book.author;
+        condition = book.condition;
+        OwnerId = userId;
+        situation = book.situation;
+    };
+    
+    // Add the new book to the storage
+    books := Trie.replace(
+        books,
+        key(bookId),
+        Nat32.equal,
+        ?newBook,
     ).0;
-    bookId;
+
+    // Update the user's Books list with the newly added book
+    // users := Trie.find(users, key(userId), Nat32.equal);
+    //  user.Books := Array.append(user.Books, [newBook]);
+let result = Trie.find(users, key(userId), Nat32.equal);
+switch (result) {
+  case (?user) {
+    // User found, update their Books list
+    let updatedUser = {
+      user with
+      Books = Array.append(user.Books, [newBook]);
+    };
+     users := Trie.replace(users, key(userId), Nat32.equal, ?updatedUser).0;
   };
+  case null {
+    // User not found, handle the error or return an appropriate response
+  };
+};
 
-  // public query func getAllBooks() : async [Book] {
-         
-  // };
 
-  // Function to initiate a book exchange request
-  // public func initiateExchange(bookId: BookID, requestingUserId: UserID): async Bool {
-  // };
 
-  // Function to confirm exchange and update book status
-  // public func confirmExchange(bookId: BookID, newCondition: Text, newOwner: UserID): async Bool {
-  // };
+    bookId; // Return the ID of the newly added book
+  };
+// function bring all the added books
+public query func getAllBooks(): async [(BookID, Book)] {
+  // change trie to Array and return it
+    let bookPairs: [(BookID, Book)] = Iter.toArray(Trie.iter(books));
+    return bookPairs
+};
+
+// Function to initiate a book exchange request
+public func initiateExchange(bookId: BookID, requestingUserId: UserID): async Bool {
+    // Retrieve the book from the storage
+    let maybeBook = Trie.find(books, key(bookId), Nat32.equal);
+    switch (maybeBook) {
+        case (?book) {
+            // Book found, check if the requesting user is not the OwnerId
+            if (book.OwnerId != requestingUserId) {
+                // Perform the exchange initiation logic here
+                // For example, you can send a notification to the book OwnerId
+                return true; // Exchange initiated successfully
+            } else {
+                return false; // Requesting user is the OwnerId of the book
+            }
+        };
+        case null {
+            // Book not found
+            return false;
+        };
+    };
+};
+
+// Function to confirm exchange and update book status
+public func confirmExchange(bookId: BookID, newCondition: Text, newOwner: UserID): async Bool {
+    // Retrieve the book from the storage
+    let maybeBook = Trie.find(books, key(bookId), Nat32.equal);
+    switch (maybeBook) {
+        case (?book) {
+            // Book found, update its condition and OwnerId
+            let updatedBook = {
+                title = book.title;
+                author = book.author;
+                condition = newCondition;
+                OwnerId = newOwner;
+                situation = book.situation; // Assuming you don't want to update situation
+            };
+            // Update the book in the storage
+            books := Trie.replace(
+                books,
+                key(bookId),
+                Nat32.equal,
+                ?updatedBook,
+            ).0;
+            return true; // Exchange confirmed and book updated successfully
+        };
+        case null {
+            // Book not found
+            return false;
+        };
+    };
+};
+
+
+
 };
