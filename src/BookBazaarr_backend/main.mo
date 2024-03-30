@@ -129,7 +129,7 @@ switch (result) {
      users := Trie.replace(users, key(userId), Nat32.equal, ?updatedUser).0;
   };
   case null {
-    // User not found, handle the error or return an appropriate response
+    // User not found
   };
 };
 
@@ -152,8 +152,7 @@ public func initiateExchange(bookId: BookID, requestingUserId: UserID): async Bo
         case (?book) {
             // Book found, check if the requesting user is not the OwnerId
             if (book.OwnerId != requestingUserId) {
-                // Perform the exchange initiation logic here
-                // For example, you can send a notification to the book OwnerId
+                // send a notification to the book OwnerId
                 return true; // Exchange initiated successfully
             } else {
                 return false; // Requesting user is the OwnerId of the book
