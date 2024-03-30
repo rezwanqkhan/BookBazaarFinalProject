@@ -1,59 +1,68 @@
-# BookBazaarr
+# BookBazaar
 
-Welcome to your new BookBazaarr project and to the internet computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
+BookBazaar is a web3 project in Internet Computer developed using the Motoko language(backend) during the Internet Computer Internship Bootcamp. It is a web application where users can register and log in to buy, sell, or exchange their used books. The platform aims to facilitate the exchange of books among users, promoting literacy, recycling, and economic benefits.
 
-To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
 
-To learn more before you start working with BookBazaarr, see the following documentation available online:
 
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-- [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
-- [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
+## Purpose
 
-If you want to start working on your project right away, you might want to try the following commands:
+The purpose of BookBazaar is to provide a platform where users can easily sell or exchange their used books with others. This not only helps users declutter their bookshelves but also allows them to earn some money by selling books they no longer need. Additionally, by exchanging books, users can explore new genres and expand their knowledge without spending money on new books.
 
-```bash
-cd BookBazaarr/
-dfx help
-dfx canister --help
-```
+## Functionality
 
-## Running the project locally
+### User Registration and Login
 
-If you want to test your project locally, you can use the following commands:
+Users can register on the platform by providing their name, last name, email, and password. After registration, users can log in to their accounts using their email and password.
 
-```bash
-# Starts the replica, running in the background
-dfx start --background
+### Add New Book
 
-# Deploys your canisters to the replica and generates your candid interface
-dfx deploy
-```
+Logged-in users can add new books to the platform by providing details such as the title, author, condition, and situation (e.g., available for sale or exchange).
 
-Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
+### Request to Buy or Exchange Books
 
-If you have made changes to your backend canister, you can generate a new candid interface with
+Users can browse through the available books on the platform and make requests to buy or exchange books with other users. When a request is made, the owner of the book receives a notification, and they can choose to accept or reject the request.
 
-```bash
-npm run generate
-```
+### Confirm Exchange
 
-at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.
+If the owner accepts the exchange request, the exchange is confirmed, and the book's status is updated accordingly. Users can update the condition of the book if necessary.
 
-If you are making frontend changes, you can start a development server with
+## Example Screenshots- CandidUI
 
-```bash
-npm start
-```
+Here are some screenshots of the BookBazaar project:
 
-Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
+---
+| Registration | Registration |
+|:--------------:|:--------------:|
+|  <img width="956" alt="rgisteralice1" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/e6965ccd-8d4c-4dbd-8831-b27dc621127a">|  <img width="956" alt="1idmichaelregistered" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/d45c26ec-262f-4f15-9212-b63d7514b36f"> |
 
-### Note on frontend environment variables
+---
 
-If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to ensure your project does not fetch the root key in production:
+---
+| Login user | Login user |
+|:--------------:|:--------------:|
+| <img width="956" alt="loginalice1" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/3eb52070-d184-4363-ad8b-fd00766ef951">|  <img width="944" alt="1idmichaellogedinwith0books" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/f0409683-319c-45e6-9163-d5f4a9a9fc0c"> |
 
-- set`DFX_NETWORK` to `ic` if you are using Webpack
-- use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
-  - Setting `canisters -> {asset_canister_id} -> declarations -> env_override to a string` in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
-- Write your own `createActor` constructor
+---
+| Add Books | Add Books  |
+|:--------------:|:--------------:|
+| <img width="956" alt="0idAliceAddfirstbook" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/6d06c730-2198-462e-af3f-172643efaade">|  <img width="955" alt="1idmichaeladdedfirstbook" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/5e1a82c4-d7d8-4e1a-ae3b-bd9e63f25495"> |
+
+| Add Books | Add Books |
+|:--------------:|:--------------:|
+| <img width="950" alt="0idAlice addscondBook" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/ddfd90fe-6d87-4c83-8d7a-5283a918572f">|  <img width="956" alt="1idMichaelAddedSecodnBook" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/d052e7b1-27f7-48b8-ac24-db18d0077238"> |
+
+| User's Books | Users's Books |
+|:--------------:|:--------------:|
+| <img width="958" alt="NowAliceHad2books" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/57381130-6895-4d5f-a52a-4451dbc0d39f">| <img width="957" alt="1idMichaelNowHas2books" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/33b8fe62-aa9f-42a1-9004-3d06c2ec056a">|
+
+| All Books in the system  |
+|:--------------:|
+|<img width="950" alt="allBooksInTheSystem" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/c5b56632-d17f-4b72-82a9-569ef043d8dc">| 
+
+| Request to buy or exchange by ID| Accept the request to buy or exchange by ID |
+|:--------------:|:--------------:|
+| <img width="956" alt="1idmechaelRequated0idBook" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/d7898652-ee53-4089-a35a-1a17f5965f4d">| <img width="959" alt="the exchange accepted" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/04404d2a-7e8a-4d44-8ff4-0f8ee2ba33c1">|
+
+| The Books situations are updated  |
+|:--------------:|
+|<img width="956" alt="the book situationsupdated" src="https://github.com/rezwanqkhan/BookBazaarFinalProject/assets/91380892/4d875bdd-12ac-4712-8380-26c5a62f50cb">| 
